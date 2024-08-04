@@ -1,47 +1,57 @@
 import {NextResponse} from "next/server";
 import ytdl from "@distube/ytdl-core";
-import OpenAI from "openai";
+import OpenAI, {toFile} from "openai";
+import {put, del} from '@vercel/blob';
 
 export async function GET(request) {
   console.log("Downloading video...");
   const url = request.nextUrl.searchParams.get("v");
   const videoId = request.nextUrl.searchParams.get("id");
-  // console.log("Get video info...");
-  // const info = await ytdl.getInfo(url);
-  // const videoId = info.videoDetails.videoId;
-  // const videoId = url.split("?v=")[1];
 
   const downloadVideo = new Promise((resolve, reject) => {
-    /*setTimeout(() => {
-      resolve(NextResponse.json({"status": "success"}));
-    }, 300);*/
-    ytdl(url, {filter: 'audioonly'})
-            .pipe(require("fs")
-                    .createWriteStream(`${videoId}.mp3`))
-            .on('close', () => {
-              console.log('done')
-              const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-              const openai = new OpenAI({apiKey: OPENAI_API_KEY});
-              openai.audio.transcriptions.create({
-                file: require("fs").createReadStream(`${videoId}.mp3`),
-                model: "whisper-1",
-                response_format: "verbose_json"
-              }).then((response) => {
-                require("fs")
-                        .unlink(`${videoId}.mp3`, (err) => {
-                          if (err) throw err;
-                          console.log(`${videoId}.mp3 file was deleted`);
-                        })
-                const srtOutput = convertToSRT(response);
-                resolve(NextResponse.json({"srt": srtOutput}));
-              });
+    const stream = ytdl(url, {filter: 'audioonly'});
+    let chunks = [];
 
-            })
-            .on('error', (err) => {
-              console.error(err)
-              reject(NextResponse.json({"status": "error"}));
-            });
+    stream.on('data', chunk => chunks.push(chunk));
+    stream.on('end', async () => {
+      let buffer = Buffer.concat(chunks);
+      try {
+        // Upload to Vercel Blob
+        const {url, downloadUrl} = await put(`${videoId}.mp3`, buffer, {access: 'public'});
+        console.log(url, downloadUrl);
+
+        console.log('File uploaded to Vercel Blob');
+
+        const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+        const openai = new OpenAI({apiKey: OPENAI_API_KEY});
+
+        const response = await openai.audio.transcriptions.create({
+          file: await toFile(new Blob([buffer], {type: 'audio/mpeg'}), `${videoId}.mp3`),
+          model: "whisper-1",
+          response_format: "verbose_json"
+        });
+
+        console.log('File transcribed');
+
+        // Delete the file from Vercel Blob
+        await del(url);
+        console.log('File deleted from Vercel Blob');
+
+        const srtOutput = convertToSRT(response);
+        resolve(NextResponse.json({"srt": srtOutput}));
+      } catch (error) {
+        console.error('Error:', error);
+        reject(NextResponse.json({"status": "error"}));
+      }
+
+    });
+
+    stream.on('error', (err) => {
+      console.error(err)
+      reject(NextResponse.json({"status": "error"}));
+    });
   });
+
   return await downloadVideo;
 }
 
@@ -54,9 +64,7 @@ function convertToSRT(data) {
     const startTime = formatTime(segment.start);
     const endTime = formatTime(segment.end);
 
-    return `${index + 1} \n${startTime} --> ${endTime} \n${segment.text.trim()} \n\n`;
-    /*return index === 0 ? `\t\t\t${index + 1} \n\t\t\t${startTime} --> ${endTime} \n\t\t\t${segment.text.trim()} \n`
-            : `\t\t\t${index + 1} \n\t\t\t${startTime} --> ${endTime} \n\t\t\t${segment.text.trim()} \n`;*/
+    return `${index + 1}\n${startTime} --> ${endTime}\n${segment.text.trim()}\n\n`;
   }).join('');
 }
 
