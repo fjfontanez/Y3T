@@ -22,7 +22,7 @@ export async function GET(request) {
               console.log('done')
               const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
               const openai = new OpenAI({apiKey: OPENAI_API_KEY});
-              const response = openai.audio.transcriptions.create({
+              openai.audio.transcriptions.create({
                 file: require("fs").createReadStream(`${videoId}.mp3`),
                 model: "whisper-1",
                 response_format: "verbose_json"

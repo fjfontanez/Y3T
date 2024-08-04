@@ -1,5 +1,3 @@
-import {generateText} from 'ai' // Vercel AI SDK ***
-import {openai} from '@ai-sdk/openai'
 import {useState} from "react"; // Vercel AI SDK ***
 
 export default function SubtitleTranslator({transcription}) {
