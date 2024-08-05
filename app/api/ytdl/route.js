@@ -17,8 +17,7 @@ export async function GET(request) {
       let buffer = Buffer.concat(chunks);
       try {
         // Upload to Vercel Blob
-        const {url, downloadUrl} = await put(`${videoId}.mp3`, buffer, {access: 'public'});
-        console.log(url, downloadUrl);
+        const {url} = await put(`${videoId}.mp3`, buffer, {access: 'public'});
 
         console.log('File uploaded to Vercel Blob');
 
@@ -39,16 +38,16 @@ export async function GET(request) {
 
         const srtOutput = convertToSRT(response);
         resolve(NextResponse.json({"srt": srtOutput}));
-      } catch (error) {
-        console.error('Error:', error);
-        reject(NextResponse.json({"status": "error"}));
+      } catch (err) {
+        console.error('Error:', err);
+        reject(new Error(err));
       }
 
     });
 
     stream.on('error', (err) => {
       console.error(err)
-      reject(NextResponse.json({"status": "error"}));
+      reject(new Error(err));
     });
   });
 

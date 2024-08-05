@@ -12,8 +12,8 @@ importers:
         specifier: ^0.0.40
         version: 0.0.40(zod@3.23.8)
       '@distube/ytdl-core':
-        specifier: ^4.14.0
-        version: 4.14.0
+        specifier: ^4.14.2
+        version: 4.14.2
       '@vercel/blob':
         specifier: ^0.23.4
         version: 0.23.4
@@ -23,6 +23,9 @@ importers:
       flag-icons:
         specifier: ^7.2.3
         version: 7.2.3
+      lucide-react:
+        specifier: ^0.424.0
+        version: 0.424.0(react@18.3.1)
       next:
         specifier: 14.2.5
         version: 14.2.5(@opentelemetry/api@1.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -146,8 +149,8 @@ packages:
     resolution: {integrity: sha512-YTnYtra7W9e6/oAZEHj0bJehPRUlLH9/fbpT5LfB0NhQXyALCRkRs3zH9v07IYhkgpqX6Z78FnuccZr/l4Fs4Q==}
     engines: {node: '>=6.9.0'}
 
-  '@distube/ytdl-core@4.14.0':
-    resolution: {integrity: sha512-1CH+gGewXKIjlEol0Y3JkaGoT/7yjKdC5BT5fe217Z8KoenKoPQLL2BmlcT0w3wyiH8pBCoJ465DHu9Y+jFmNg==}
+  '@distube/ytdl-core@4.14.2':
+    resolution: {integrity: sha512-rRNl3Bxnw5MYn5LVblauBZVzumdcwwgFgWt8p3/41uGW3I2g2lPpWz8C9U5qH7BDbYPzk2P5SUjkld8NE/OUrQ==}
     engines: {node: '>=14.0'}
 
   '@eslint-community/eslint-utils@4.4.0':
@@ -1264,6 +1267,11 @@ packages:
   lru-cache@10.4.3:
     resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
 
+  lucide-react@0.424.0:
+    resolution: {integrity: sha512-x2Nj2aytk1iOyHqt4hKenfVlySq0rYxNeEf8hE0o+Yh0iE36Rqz0rkngVdv2uQtjZ70LAE73eeplhhptYt9x4Q==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
+
   m3u8stream@0.8.6:
     resolution: {integrity: sha512-LZj8kIVf9KCphiHmH7sbFQTVe4tOemb202fWwvJwR9W5ENW/1hxJN6ksAWGhQgSBSa3jyWhnjKU1Fw1GaOdbyA==}
     engines: {node: '>=12'}
@@ -2031,7 +2039,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@distube/ytdl-core@4.14.0':
+  '@distube/ytdl-core@4.14.2':
     dependencies:
       http-cookie-agent: 6.0.5(tough-cookie@4.1.4)(undici@5.28.4)
       m3u8stream: 0.8.6
@@ -3370,6 +3378,10 @@ snapshots:
       js-tokens: 4.0.0
 
   lru-cache@10.4.3: {}
+
+  lucide-react@0.424.0(react@18.3.1):
+    dependencies:
+      react: 18.3.1
 
   m3u8stream@0.8.6:
     dependencies:

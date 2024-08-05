@@ -3,22 +3,46 @@
 import {useState} from "react";
 import SubtitleTranslator from "@/app/components/SubtitleTranslator";
 import {v4 as uuidv4} from "uuid";
+import CopyableTextarea from "@/app/components/CopyableTextarea";
+
 
 export default function TranscribeYouTube() {
   const [videoUrl, setVideoUrl] = useState('');
   const [transcript, setTranscript] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const isValidYouTubeUrl = (url) => {
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/;
+    return youtubeRegex.test(url);
+  };
 
   async function transcribeVideo() {
+    setError('');
+    if (!videoUrl.trim()) {
+      setError('Please enter a YouTube URL');
+      return;
+    }
+    if (!isValidYouTubeUrl(videoUrl)) {
+      setError('Please enter a valid YouTube URL');
+      return;
+    }
+
     setIsLoading(true);
-    // const videoIdResponse = await fetch(`/api/ytdl/info?v=${videoUrl}`);
-    // const videoIdJson = await videoIdResponse.json();
-    const videoId = uuidv4();
-    const response = await fetch(`/api/ytdl?v=${videoUrl}&id=${videoId}`);
-    const data = await response.json();
-    console.log(data);
-    setTranscript(data.srt);
-    setIsLoading(false);
+    try {
+      const videoId = uuidv4();
+      const response = await fetch(`/api/ytdl?v=${videoUrl}&id=${videoId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch transcript');
+      }
+      const data = await response.json();
+      setTranscript(data.srt);
+    } catch (err) {
+      setError('An error occurred while transcribing the video');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   }
 
 
@@ -28,26 +52,35 @@ export default function TranscribeYouTube() {
               <label htmlFor="youtubeUrl" className="block text-2xl text-white font-bold">
                 Enter the YouTube Video Url
               </label>
-              <input id="youtubeUrl" className="w-full h-12 px-4 border-4 border-purple-900 rounded-lg shadow-lg"
-                     onChange={(e) => setVideoUrl(e.target.value)} type="text"
-                     placeholder="https://www.youtube.com/watch?v=MuSfw8PL3jw"/>
+              <input id="youtubeUrl"
+                     className="w-full h-12 px-4 border-4 border-purple-900 rounded-lg shadow-lg"
+                     onChange={(e) => setVideoUrl(e.target.value)}
+                     type="text"
+                     placeholder="https://www.youtube.com/watch?v=MuSfw8PL3jw"
+              />
+              {error && <p className="text-red-500">{error}</p>}
               <div className="flex justify-center">
                 <button
-                        className="w-64 bg-purple-900 text-white text-xl font-bold py-3 px-6 rounded-lg hover:bg-purple-700 transition-colors shadow-lg"
+                        className="w-64 bg-purple-900 text-white text-xl font-bold py-3 px-6 rounded-lg transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed enabled:hover:bg-purple-700"
                         disabled={isLoading}
                         onClick={transcribeVideo}>
                   {isLoading ?
                           (<>
                             <div
                                     className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-e-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-                                    role="status"></div>
+                                    ></div>
                             <span>Transcribing...</span>
                           </>) :
                           (<span>Transcribe</span>)}
                 </button>
               </div>
-              <textarea defaultValue={transcript}
-                        className="w-full h-48 p-4 border-4 border-purple-950 rounded-lg"></textarea>
+              {/*<textarea defaultValue={transcript}
+                        disabled={transcript === ''}
+                        className="w-full h-48 p-4 border-4 border-purple-950 rounded-lg"></textarea>*/}
+              <CopyableTextarea
+                      value={transcript}
+                      onChange={(e) => setTranscript(e.target.value)}
+              />
               <SubtitleTranslator transcription={transcript}/>
             </div>
           </div>);
