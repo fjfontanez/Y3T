@@ -1,5 +1,5 @@
 import {useState} from "react";
-import CopyableTextarea from "@/app/components/CopyableTextarea"; // Vercel AI SDK ***
+import CopyableTextarea from "@/app/components/CopyableTextarea";
 
 export default function SubtitleTranslator({transcription}) {
 

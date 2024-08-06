@@ -74,9 +74,6 @@ export default function TranscribeYouTube() {
                           (<span>Transcribe</span>)}
                 </button>
               </div>
-              {/*<textarea defaultValue={transcript}
-                        disabled={transcript === ''}
-                        className="w-full h-48 p-4 border-4 border-purple-950 rounded-lg"></textarea>*/}
               <CopyableTextarea
                       value={transcript}
                       onChange={(e) => setTranscript(e.target.value)}
