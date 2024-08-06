@@ -26,6 +26,9 @@ Whether you want to reach new audiences with your videos or if you finally want 
 - Quickly translate the transcription to different languages using **OpenAI GPT-4o Model** keeping the SRT format and Copy or Download the translated SRT for further fine-tuning.
 - User Friendly and Intuitive interface to get results quickly and easily.
 
+## Limitations:
+- Videos that are too long, for example, more than 5 minutes. Take long for **OpenAI Whisper** to transcribe. This can result on a timeout depending on server limitations.
+
 ## Preview
 ![app-preview.png](resources/app-preview.png)
 

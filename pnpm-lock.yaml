@@ -12,8 +12,8 @@ importers:
         specifier: ^0.0.40
         version: 0.0.40(zod@3.23.8)
       '@distube/ytdl-core':
-        specifier: ^4.14.2
-        version: 4.14.2
+        specifier: ^4.14.3
+        version: 4.14.3
       '@vercel/blob':
         specifier: ^0.23.4
         version: 0.23.4
@@ -149,8 +149,8 @@ packages:
     resolution: {integrity: sha512-YTnYtra7W9e6/oAZEHj0bJehPRUlLH9/fbpT5LfB0NhQXyALCRkRs3zH9v07IYhkgpqX6Z78FnuccZr/l4Fs4Q==}
     engines: {node: '>=6.9.0'}
 
-  '@distube/ytdl-core@4.14.2':
-    resolution: {integrity: sha512-rRNl3Bxnw5MYn5LVblauBZVzumdcwwgFgWt8p3/41uGW3I2g2lPpWz8C9U5qH7BDbYPzk2P5SUjkld8NE/OUrQ==}
+  '@distube/ytdl-core@4.14.3':
+    resolution: {integrity: sha512-z6i5EVGEuKhuvuRNyIqafBSs5aRA28HssnWehCRhEtYrxeFgXImfmpKTjUusHYU5vQt1swSVPVb2JCd22P0CPA==}
     engines: {node: '>=14.0'}
 
   '@eslint-community/eslint-utils@4.4.0':
@@ -2039,7 +2039,7 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@distube/ytdl-core@4.14.2':
+  '@distube/ytdl-core@4.14.3':
     dependencies:
       http-cookie-agent: 6.0.5(tough-cookie@4.1.4)(undici@5.28.4)
       m3u8stream: 0.8.6

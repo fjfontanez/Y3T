@@ -38,7 +38,7 @@ export default function TranscribeYouTube() {
       const data = await response.json();
       setTranscript(data.srt);
     } catch (err) {
-      setError('An error occurred while transcribing the video');
+      setError('An error occurred while transcribing the video, try with a shorter video');
       console.error(err);
     } finally {
       setIsLoading(false);
