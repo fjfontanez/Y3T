@@ -14,8 +14,8 @@ export async function GET(request) {
   const downloadVideo = new Promise((resolve, reject) => {
 
     const agent = ytdl.createAgent(cookies);
-    console.log("Cookies", cookies);
-    console.log("COOKIES_URL", COOKIES_URL);
+    // console.log("Cookies", cookies);
+    // console.log("COOKIES_URL", COOKIES_URL);
     const stream = ytdl(url, {filter: 'audioonly', agent});
     let chunks = [];
 
