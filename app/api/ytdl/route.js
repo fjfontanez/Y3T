@@ -16,7 +16,7 @@ export async function GET(request) {
     const agent = ytdl.createAgent(cookies);
     // console.log("Cookies", cookies);
     // console.log("COOKIES_URL", COOKIES_URL);
-    const stream = ytdl(url, {filter: 'audioonly', agent});
+    const stream = ytdl(url, {filter: "audio", agent});
     let chunks = [];
 
     stream.on('data', chunk => chunks.push(chunk));
