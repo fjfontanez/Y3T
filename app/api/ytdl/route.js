@@ -9,7 +9,9 @@ export async function GET(request) {
   const videoId = request.nextUrl.searchParams.get("id");
 
   const downloadVideo = new Promise((resolve, reject) => {
-    const stream = ytdl(url, {filter: 'audioonly'});
+    const AGENT_COOKIES = JSON.parse(process.env.YOUTUBE_AGENT_COOKIES);
+    const agent = ytdl.createAgent(AGENT_COOKIES);
+    const stream = ytdl(url, {filter: 'audioonly', agent});
     let chunks = [];
 
     stream.on('data', chunk => chunks.push(chunk));
