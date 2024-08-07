@@ -7,10 +7,15 @@ export async function GET(request) {
   console.log("Downloading video...");
   const url = request.nextUrl.searchParams.get("v");
   const videoId = request.nextUrl.searchParams.get("id");
+  const COOKIES_URL = process.env.COOKIES_URL;
+  const cookiesResponse = await fetch(COOKIES_URL);
+  const cookies = await cookiesResponse.json();
 
   const downloadVideo = new Promise((resolve, reject) => {
-    const AGENT_COOKIES = JSON.parse(process.env.YOUTUBE_AGENT_COOKIES);
-    const agent = ytdl.createAgent(AGENT_COOKIES);
+
+    const agent = ytdl.createAgent(cookies);
+    console.log("Cookies", cookies);
+    console.log("COOKIES_URL", COOKIES_URL);
     const stream = ytdl(url, {filter: 'audioonly', agent});
     let chunks = [];
 
