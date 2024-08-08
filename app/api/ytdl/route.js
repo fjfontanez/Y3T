@@ -10,12 +10,12 @@ export async function GET(request) {
   const COOKIES_URL = process.env.COOKIES_URL;
   const cookiesResponse = await fetch(COOKIES_URL);
   const cookies = await cookiesResponse.json();
+  console.log("Cookies", cookies);
+  console.log("COOKIES_URL", COOKIES_URL);
 
   const downloadVideo = new Promise((resolve, reject) => {
 
     const agent = ytdl.createAgent(cookies);
-    // console.log("Cookies", cookies);
-    // console.log("COOKIES_URL", COOKIES_URL);
     const stream = ytdl(url, {filter: "audio", agent});
     let chunks = [];
 
